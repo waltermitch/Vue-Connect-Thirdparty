@@ -1,0 +1,19 @@
+{
+    "bio_data": {
+        "full_name": "Michael O. Odegbaro",
+        "date_of_birth": "20th March, 1991",
+        "place_of_birth": "Osun, Nigeria.",
+        "phone_number": "+2349097694139",
+        "github_link": "https://github.com/babyfaceEasy",
+        "email_address": "oodegbaro@gmail.com",
+        "bio":  [
+            "I'm a software engineer with over 3 profssional years of experience in developing production based applications.",
+            " I started out as a backend developer building apps in laravel / lumen and gradually graduated into full stack when i started working with vuejs to build front-end apps.",
+            "In my second job i became a full stack developer where i built apps using Django & Django Rest Framework (DRF), PostgreSQL, VueJS2.0 & redis.",
+            "I also started my journey in to the world of software architect. I happened to be the software engineer that had a good understanding and knowledge base in Python.",
+            "I suggested frameworks and technologies to use, which i learnt by reading engineering blogs like instagram & medium.",
+            "I currentlty work as a full stack engineer with more focus on the backend. I'm tasked with providing solutions to issues arising and implementing them from frontend to backend."
+
+        ]
+    }
+}
