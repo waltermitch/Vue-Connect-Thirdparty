@@ -1,18 +1,19 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png" />
-        <HelloWorld msg="Welcome to Your Vue.js App" />
-    </div>
+  <span>
+    <favorite-things></favorite-things>
+  </span>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
-
+import FavoriteThings from '@/components/FavoriteThings';
 export default {
-    name: 'home',
-    components: {
-        HelloWorld
-    }
+  name: 'Home',
+  components: {
+    FavoriteThings
+  },
+  created() {
+    console.log(this.$store.state.apiBaseUrl);
+    console.log(process.env);
+  }
 };
 </script>

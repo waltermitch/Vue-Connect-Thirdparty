@@ -15,8 +15,8 @@ class ThingSerializer(ModelSerializer):
 
     class Meta:
         model = Thing
-        fields = ('id', 'description', 'title', 'category_name', 'meta',
-                  'category', 'created_at', 'updated_at')
+        fields = ('id', 'description', 'title', 'ranking', 'category_name',
+                  'meta', 'category', 'created_at', 'updated_at')
         read_only_fields = ('id', 'categgory_name')
 
     def validate_decription(self, value):
@@ -30,18 +30,22 @@ class ThingSerializer(ModelSerializer):
         return obj.category.name
 
     def create(self, validated_data):
+        print(validated_data)
         things_count = validated_data['category'].thing_set.filter(
-            ranking__exact=validated_data['ranking']).order_by('ranking')
+            ranking__exact=validated_data['ranking']).order_by('ranking').count()
+        print(validated_data.get('category').thing_set.order_by('ranking'))
+        # return 'self'
         if things_count == 0:
             obj = super().create(valiated_data)
             return obj
-        things = validated_data['category'].thing_set.all().order_by('ranking')
-        for thing in thhins:
+        things = validated_data['category'].thing_set.order_by(
+            'ranking')
+        for thing in things:
             if thing.ranking >= validated_data['ranking']:
                 thing.ranking += 1
                 thing.save()
         obj = super().create(validated_data)
-        things = validated_data['category'].thing_set_all().order_by('ranking')
+        things = validated_data['category'].thing_set.order_by('ranking')
         return obj
 
     def update(self, instance, validated_data):
