@@ -14,6 +14,29 @@
     </v-layout>
     <v-layout row wrap align-center>
       <v-flex xs8 offset-md2>
+        <!-- Audit log details -->
+        <v-layout row justify-end fill-height xs8 offset-md-2>
+          <v-dialog v-model="auditLogDialog" max-width="600px">
+            <v-card>
+              <v-card-title>
+                <div class="headline text-sm-center">Audit Log</div>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <v-flex xs12 v-for="(log, idx) in currAuditLog" :key="idx">
+                      <p>{{logText(log)}}</p>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="brown darken-1" block flat @click="closeAuditLogs">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-layout>
+        <!-- end of audit log details-->
         <!-- Edit Dialog -->
         <v-layout row justify-end fill-height xs8 offset-md2>
           <v-dialog v-model="editDialog" max-width="500px">
@@ -65,6 +88,17 @@
                 <span class="body-1 align-left">{{category.name}}</span>
               </v-flex>
               <v-flex xs6 class="text-xs-right">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-icon
+                      color="brown darken-4"
+                      v-on="on"
+                      class="icons mx-3"
+                      @click="showAuditLogs(category.history)"
+                    >list</v-icon>
+                  </template>
+                  <span>Audit Logs</span>
+                </v-tooltip>
                 <v-icon
                   color="brown darken-4"
                   class="icons mx-3"
@@ -101,8 +135,10 @@ export default {
       errorVal: '',
       errorStatus: false,
       editDialog: false,
+      auditLogDialog: false,
       categoryRules: [category => !!category || 'Category name is required.'],
-      currCategory: {}
+      currCategory: {},
+      currAuditLog: {}
     };
   },
   created() {
@@ -114,6 +150,9 @@ export default {
     }
   },
   methods: {
+    viewLogs(category) {
+      console.log(category);
+    },
     showSuccessMessage(value) {
       this.sucVal = value.message;
       this.sucStatus = value.status;
@@ -129,6 +168,25 @@ export default {
       this.errorVal = '';
       this.errorStatus = false;
     },
+    showAuditLogs(logs) {
+      this.currAuditLog = logs;
+      this.auditLogDialog = true;
+    },
+    closeAuditLogs() {
+      this.currAuditLog = {};
+      this.auditLogDialog = false;
+    },
+    logText(log) {
+      let returnStr = '';
+      if (log.history_type == '+') {
+        returnStr += 'Created on ';
+      } else {
+        returnStr += 'Updated on ';
+      }
+      let dt_js = new Date(log.history_date);
+      returnStr += dt_js.toDateString();
+      return returnStr;
+    },
     async updateCategory() {
       if (!this.$refs.editCategoryForm.validate()) {
         return;
@@ -137,9 +195,7 @@ export default {
         return;
       }
       // perform update
-      let api_url = `${this.$store.state.apiBaseUrl}/category/${
-        this.currCategory.id
-      }/`;
+      let api_url = `${this.$store.state.apiBaseUrl}/category/${this.currCategory.id}/`;
       try {
         let response = await axios.put(api_url, this.currCategory);
       } catch (error) {
@@ -154,9 +210,7 @@ export default {
     async deleteCategory(category_id) {
       if (confirm('Are you sure you want to delete this category?')) {
         try {
-          let api_url = `${
-            this.$store.state.apiBaseUrl
-          }/category/${category_id}/`;
+          let api_url = `${this.$store.state.apiBaseUrl}/category/${category_id}/`;
           console.log(api_url);
           let response = await axios.delete(api_url);
         } catch (error) {

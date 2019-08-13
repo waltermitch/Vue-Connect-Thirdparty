@@ -19,6 +19,29 @@
         <new-category v-on:successfulCreation="showSuccessMessage"></new-category>
         <new-favorite-things v-on:successfulCreation="showSuccessMessage"></new-favorite-things>
         <!-- End -->
+        <!-- Audit log details -->
+        <v-layout row justify-end fill-height xs8 offset-md-2>
+          <v-dialog v-model="auditLogDialog" max-width="600px">
+            <v-card>
+              <v-card-title>
+                <div class="headline text-sm-center">Audit Log</div>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <v-flex xs12 v-for="(log, idx) in currAuditLog" :key="idx">
+                      <p>{{logText(log)}}</p>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn color="brown darken-1" block flat @click="closeAuditLogs">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-layout>
+        <!-- end of audit log details-->
         <!-- View Full Dets -->
         <v-layout row justify-end fill-height xs8 offset-md-2>
           <v-dialog v-model="fullDetsDialog" max-width="600px">
@@ -86,6 +109,17 @@
                           v-model="favoriteThing.meta"
                           hint="JSON object representing need fields."
                         ></v-textarea>
+                      </v-flex>
+
+                      <v-flex xs6>
+                        <p
+                          class="text-md-center"
+                        >Created On : {{formatDate(favoriteThing.created_at)}}</p>
+                      </v-flex>
+                      <v-flex xs6>
+                        <p
+                          class="text-md-center"
+                        >Updated On : {{formatDate(favoriteThing.updated_at)}}</p>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -200,6 +234,17 @@
               class="icons mx-3"
             >edit</v-icon>
             <v-icon color="brown darken-4" @click="deleteThing(thing.id)" class="icons mx-3">delete</v-icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  color="brown darken-4"
+                  v-on="on"
+                  class="icons mx-3"
+                  @click="showAuditLogs(thing.history)"
+                >list</v-icon>
+              </template>
+              <span>Audit Logs</span>
+            </v-tooltip>
             <v-spacer></v-spacer>
             <v-btn
               flat
@@ -232,10 +277,12 @@ export default {
       dialog: false,
       fullDetsDialog: false,
       editThingDialog: false,
+      auditLogDialog: false,
       favoriteThing: {},
       categoryRules: [category => !!category || 'Please select a category'],
       titleRules: [title => !!title || 'Please enter a title.'],
-      rankingRules: [ranking => !!ranking || 'Please enter the ranking.']
+      rankingRules: [ranking => !!ranking || 'Please enter the ranking.'],
+      currAuditLog: {}
     };
   },
   created() {
@@ -251,6 +298,10 @@ export default {
     }
   },
   methods: {
+    formatDate(dt) {
+      let dt_js = new Date(dt);
+      return dt_js.toDateString();
+    },
     showFullDetsDialog(thing) {
       this.favoriteThing = thing;
       this.fullDetsDialog = true;
@@ -266,14 +317,31 @@ export default {
       this.favoriteThing = thing;
       this.editThingDialog = true;
     },
+    showAuditLogs(logs) {
+      this.currAuditLog = logs;
+      this.auditLogDialog = true;
+    },
+    closeAuditLogs() {
+      this.currAuditLog = {};
+      this.auditLogDialog = false;
+    },
+    logText(log) {
+      let returnStr = '';
+      if (log.history_type == '+') {
+        returnStr += 'Created on ';
+      } else {
+        returnStr += 'Updated on ';
+      }
+      let dt_js = new Date(log.history_date);
+      returnStr += dt_js.toDateString();
+      return returnStr;
+    },
     async updateThing() {
       if (!this.$refs.editFavoriteThingForm.validate()) {
         return;
       }
       // perform update
-      let api_url = `${this.$store.state.apiBaseUrl}/thing/${
-        this.favoriteThing.id
-      }/`;
+      let api_url = `${this.$store.state.apiBaseUrl}/thing/${this.favoriteThing.id}/`;
 
       try {
         let response = await axios.put(api_url, this.favoriteThing);

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Category from './views/Category.vue';
+import AuditLog from './views/AuditLog.vue';
 
 Vue.use(Router);
 
@@ -19,6 +20,13 @@ export default new Router({
       name: 'category',
       component: Category
     },
+    /*
+    {
+      path: '/audit-log',
+      name: 'audit-log',
+      component: AuditLog
+    },
+    */
     {
       path: '/about',
       name: 'about',

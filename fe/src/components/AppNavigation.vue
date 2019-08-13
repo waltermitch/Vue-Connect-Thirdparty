@@ -18,6 +18,7 @@
       </router-link>
       <v-btn flat class="hidden-sm-and-down white--text" @click="goTo('home')">Favorite Things</v-btn>
       <v-btn flat class="hidden-sm-and-down white--text" @click="goTo('category')">Category</v-btn>
+      <!--<v-btn flat class="hidden-sm-and-down white--text" @click="goTo('audit-log')">Audit Logs</v-btn>-->
     </v-toolbar>
   </span>
 </template>
@@ -28,7 +29,11 @@ export default {
     return {
       appTitle: 'Brite Core',
       drawer: false,
-      items: [{ title: 'Favorite Things' }, { title: 'Category' }]
+      items: [
+        { title: 'Favorite Things' },
+        { title: 'Category' } /*,
+        { title: 'Audit Logs' }*/
+      ]
     };
   },
   methods: {

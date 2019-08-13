@@ -6,6 +6,7 @@ I spent close to 18 hours on this project.
 If i had more time, i would add :
 
 - Display Audit Logs (Integrate it into Admin view so that it can be seen).
+- Make the delete confirm box use vuetify modals.
 - I would expand the meta column into his own set of tables where a table would exist holding the values of all keys and users can select from there, while the values selected or entered would be saved in another table with a FK referenicing the key that corresponds to them. Also for the enum types it would have its own table for values choosen for it making it possible for it to expand as much as possible.
 - Implement pagination on the front-end (JS)
 - Unit Tests for both frontend and backend.
