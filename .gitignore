@@ -1,6 +1,7 @@
 .DS_Store
 /be/back-end/*
 /be/src/db.sqlite3
+/be/.env
 
 *.log
 *.pot
