@@ -1,4 +1,8 @@
-# BriteCore Engineering Application
+## Approach
+
+My approach was basic. I hand coded the functionalities that were unique to this project and made use of third party packages for requirements that weren't unique (CORS & Audit Log).
+
+In the project i started with the  backend (Django & PostgreSql) and then went ahead to implement the frontend using VueJS.
 
 ## Steps Taken to auto lint my code
 
@@ -25,19 +29,6 @@
   }
 ```
 
-- Then i run `npm run lint`.
-
-## Approach
-
-My approach was basic. I hand coded the functionalities that were unique to this project and made use of third party packages for requirements that weren't unique (CORS & Audit Log).
-
-In the project i started with the  backend (Django & PostgreSql) and then went ahead to implement the frontend using VueJS.
-
-
-
-## Deployment Method
-
-For my deployment, i made use of 2 Digital Ocean droplets; one for the backend (Django & PostgreSql) and another for the frontend of the app (VueJS).
-Both droplets are linux based (Ubuntu 18.0.4) 
+- Then run `npm run lint`.
 
 The frontend app connects to the backend and pulls all the resources it needs from the backend.
